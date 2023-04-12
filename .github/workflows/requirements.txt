@@ -2,7 +2,7 @@ playwright==1.19.1
 pytest==7.0.1
 pytest-base-url==1.4.2
 pytest-forked==1.4.0
-pytest-playwright==0.2.3
+pytest-playwright
 pytest-xdist==2.5.0
 python-slugify==5.0.2
 requests==2.26.0
