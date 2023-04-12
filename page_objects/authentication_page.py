@@ -4,9 +4,11 @@ class AuthenticationPage(Base):
     def navigate(self):
         self.page.goto(f"{self.base_url}/index.php?rt=account/login")
 
-    def is_register_account_option_checked(self):
-        checked = self.page.get_by_role("#accountFrm_accountregister")
-        assert checked
+    def is_register_account_option_checked(self,is_checked):
+        if is_checked == True:
+            assert self.page.locator("#accountFrm_accountregister").is_visible()
+        else:
+            assert self.page.locator("#accountFrm_accountregister").is_hidden()
 
     def click_register_button(self):
         return self.page.get_by_role("button", name=" Continue").click()
@@ -35,17 +37,20 @@ class AuthenticationPage(Base):
         self.page.fill("#AccountFrm_password", password)
         self.page.fill("#AccountFrm_confirm", password)
 
-    def fill_newsletter(self):
-        self.page.get_by_label("Yes").check()
+    def fill_newsletter(self, option):
+        return self.page.get_by_label(option).check()
 
     def check_privacy_policy(self):
-        self.page.get_by_label("I have read and agree to the Privacy Policy").check()
+        return self.page.get_by_label("I have read and agree to the Privacy Policy").check()
 
     def register(self):
-        self.page.locator("#AccountFrm div").filter(has_text="Continue").nth(2).click()
+        return self.page.locator("#AccountFrm div").filter(has_text="Continue").nth(2).click()
 
-    def user_registered_message(self):
-        assert self.page.get_by_text("Your Account Has Been Created!").is_visible()
+    def is_user_registered_message_displayed(self, is_visible):
+        if is_visible == True:
+            assert self.page.get_by_text("Your Account Has Been Created!").is_visible()
+        else:
+            assert self.page.get_by_text("Your Account Has Been Created!").is_hidden()
 
     def is_user_logged_in(self, is_logged_in):
         if is_logged_in == True:
@@ -62,6 +67,9 @@ class AuthenticationPage(Base):
         self.page.get_by_role("link", name=" Account", exact=True).hover()
         self.page.get_by_role("link", name=" Logout").click()
 
-    def user_logged_out_message(self):
-        assert self.page.get_by_text("Account Logout", exact=True).is_visible()
+    def is_user_logged_out_message_displayed(self, is_visible):
+        if is_visible == True:
+            assert self.page.get_by_text("Account Logout", exact=True).is_visible()
+        else:
+            assert self.page.get_by_text("Account Logout", exact=True).is_hidden()
     

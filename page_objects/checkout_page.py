@@ -24,25 +24,26 @@ class CheckoutPage(Base):
         self.page.locator("#estimate_postcode").fill(zip_code)
         self.page.get_by_role("button", name=" Estimate").click()
 
-    def validate_shipping_info(self):
+    def validate_shipping_info(self, subtotal, total):
         time.sleep(3)
-        assert self.page.get_by_role("row", name="Sub-Total: $36.00").get_by_role("cell", name="$36.00").nth(4)
-        assert self.page.get_by_role("cell", name="$41.06").nth(1)
+        assert self.page.get_by_role("row", name="Sub-Total: $36.00").get_by_role("cell", name=subtotal).nth(4)
+        assert self.page.get_by_role("cell", name=total).nth(1)
 
     def checkout(self):
         self.page.locator("#cart_checkout2").click()
 
-    def validate_checkout_info(self):
+    def validate_checkout_info(self, page_name, item_name, subtotal, total):
         time.sleep(3)
-        assert self.page.get_by_role("cell", name="ck One Gift Set", exact=True).is_visible()
-        assert self.page.get_by_text("Checkout Confirmation").is_visible()
-        assert self.page.get_by_role("cell", name="$41.06").first
-        assert self.page.get_by_role("cell", name="$36.00").nth(2)
+        assert self.page.get_by_text(page_name).is_visible()
+        assert self.page.get_by_role("cell", name=item_name, exact=True).is_visible()
+        assert self.page.get_by_role("cell", name=subtotal).nth(2)
+        assert self.page.get_by_role("cell", name=total).first
 
     def confirm_purchase(self):
         self.page.get_by_role("button", name=" Confirm Order").click()
+        time.sleep(5)
 
-    def validate_purchase(self):
-        time.sleep(3)
-        assert self.page.get_by_text("Your Order Has Been Processed!").is_visible()
+    def validate_purchase(self, order_confirmation_message):
+        time.sleep(5)
+        assert self.page.get_by_text(order_confirmation_message).is_visible()
    
