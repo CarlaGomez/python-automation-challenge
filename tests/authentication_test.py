@@ -1,4 +1,4 @@
-from playwright.sync_api import Playwright, sync_playwright, expect
+from playwright.sync_api import Playwright, sync_playwright
 from page_objects.authentication_page import AuthenticationPage
 from faker import Faker
 

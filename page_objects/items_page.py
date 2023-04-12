@@ -1,17 +1,20 @@
 from page_objects.commons_page import Base
+import time
 
 class ItemsPage(Base):
 
-
-    def search_for_fragances(self):
-        self.page.get_by_role("link", name="FRAGANCE").hover()
+    def search_for_fragrances(self):
+        self.page.get_by_role("link", name="Fragrance").hover()
         self.page.get_by_role("link", name="Women").click()
-
-    def fragances_for_women_heading(self):
-        assert self.page.get_by_text("Fragrance for Women").is_visible()     
+        time.sleep(3)
 
     def sort_by(self, sort_criteria):
         self.page.locator("#sort").select_option(sort_criteria)
 
     def view_item_details(self):
-        self.page.get_by_role("link", name="View", exact=True).click()
+        time.sleep(3)
+        self.page.locator("div:nth-child(3) > .thumbnail > a").click()
+
+    def product_name(self):
+        return self.page.locator(".prdocutname:nth-child(0)")
+
