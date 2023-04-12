@@ -8,11 +8,11 @@ class CheckoutPage(Base):
         self.page.locator("#product_quantity").fill(product_quantity)
         self.page.get_by_role("link", name=" Add to Cart").click()
 
-    def validate_items_on_shopping_cart(self, page_title, product, quantity):
+    async def validate_items_on_shopping_cart(self, page_title, product, quantity):
         time.sleep(3)
         assert self.page.get_by_text(page_title).is_visible()
         assert self.page.get_by_role("cell", name=product).is_visible()
-        expect(self.page.locator("#cart_quantity79")).to_contain_text(quantity)
+        await expect(self.page.locator("#cart_quantity79")).to_contain_text(quantity)
 
     def go_to_shopping_cart(self):
         self.page.get_by_role("link", name=" Cart").click()
