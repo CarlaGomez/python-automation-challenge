@@ -25,6 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         pip install pytest-playwright==0.3.0
+        pip install Faker
         pip install pytest-reporter-html1
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
