@@ -1,11 +1,16 @@
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+
 from page_objects.commons_page import Base
+
 
 class AuthenticationPage(Base):
     def navigate(self):
         self.page.goto(f"{self.base_url}/index.php?rt=account/login")
 
-    def is_register_account_option_checked(self,is_checked):
-        if is_checked == True:
+    def is_register_account_option_checked(self, is_checked):
+        if is_checked is True:
             assert self.page.locator("#accountFrm_accountregister").is_visible()
         else:
             assert self.page.locator("#accountFrm_accountregister").is_hidden()
@@ -23,7 +28,16 @@ class AuthenticationPage(Base):
         self.page.fill("#AccountFrm_telephone", phone)
         self.page.fill("#AccountFrm_fax", fax)
 
-    def fill_address(self, company, first_address, second_address, country_id, city, region_id, zip_code):
+    def fill_address(
+        self,
+        company,
+        first_address,
+        second_address,
+        country_id,
+        city,
+        region_id,
+        zip_code,
+    ):
         self.page.fill("#AccountFrm_company", company)
         self.page.fill("#AccountFrm_address_1", first_address)
         self.page.fill("#AccountFrm_address_2", second_address)
@@ -41,19 +55,26 @@ class AuthenticationPage(Base):
         return self.page.get_by_label(option).check()
 
     def check_privacy_policy(self):
-        return self.page.get_by_label("I have read and agree to the Privacy Policy").check()
+        return self.page.get_by_label(
+            "I have read and agree to the Privacy Policy"
+        ).check()
 
     def register(self):
-        return self.page.locator("#AccountFrm div").filter(has_text="Continue").nth(2).click()
+        return (
+            self.page.locator("#AccountFrm div")
+            .filter(has_text="Continue")
+            .nth(2)
+            .click()
+        )
 
     def is_user_registered_message_displayed(self, is_visible):
-        if is_visible == True:
+        if is_visible is True:
             assert self.page.get_by_text("Your Account Has Been Created!").is_visible()
         else:
             assert self.page.get_by_text("Your Account Has Been Created!").is_hidden()
 
     def is_user_logged_in(self, is_logged_in):
-        if is_logged_in == True:
+        if is_logged_in is True:
             assert self.page.get_by_role("link", name="Welcome back John").is_visible()
         else:
             assert self.page.get_by_role("link", name="Welcome back John").is_hidden()
@@ -68,8 +89,7 @@ class AuthenticationPage(Base):
         self.page.get_by_role("link", name=" Logout").click()
 
     def is_user_logged_out_message_displayed(self, is_visible):
-        if is_visible == True:
+        if is_visible is True:
             assert self.page.get_by_text("Account Logout", exact=True).is_visible()
         else:
             assert self.page.get_by_text("Account Logout", exact=True).is_hidden()
-    

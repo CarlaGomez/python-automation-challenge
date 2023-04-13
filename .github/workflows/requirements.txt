@@ -1,0 +1,6 @@
+pytest
+playwright
+pytest-playwright==0.3.0
+Faker
+pytest-reporter-html1
+python-dotenv

@@ -14,6 +14,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      LOGIN_NAME: ${{ secrets.LOGIN_NAME }}
+      LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -27,6 +31,7 @@ jobs:
         pip install pytest-playwright==0.3.0
         pip install Faker
         pip install pytest-reporter-html1
+        pip install python-dotenv
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
     - name: Run the tests
