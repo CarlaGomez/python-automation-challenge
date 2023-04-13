@@ -32,12 +32,12 @@ jobs:
         pip install Faker
         pip install pytest-reporter-html1
         pip install python-dotenv
-    - name: Run Pylint for tests 
-      run: pylint tests/
-    - name: Run Pylint for page objects
-      run: pylint tests/
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
+    - name: Run Pylint
+      run: pylint tests/
+      env:
+        PYLINTHOME: ${{github.workspace}}/.pylint.d
     - name: Run the tests
       run: pytest --template=html1/index.html --report=report.html
     - name: Upload Test Results
