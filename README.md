@@ -37,24 +37,28 @@ The UI automation test is a suite with the following test cases:
 1. Clone the repo
 
 2. Install all dependencies using
- ```pip install
+ ```
+ pip install
    ```
 All dependencies are listed on the requirements.txt file.
 
 3. Run the tests using pytest. Type on the terminal:
 
-   ```pytest
+   ```
+   pytest
    ```
 This runs all the tests on headless mode 
 
 4. To run the tests on headed mode type on the terminal:
 
-   ```pytest --headed
+   ```
+   pytest --headed
    ```
    
 4. To generate the reports type on the terminal:
 
-   ```--template=html1/index.html --report=report.html
+   ```
+   --template=html1/index.html --report=report.html
    ```
    
 ## Naming conventions
