@@ -1,5 +1,6 @@
 # pylint: disable=missing-function-docstring
 # pylint: disable=missing-module-docstring
+# pylint: disable=too-many-arguments
 
 import os
 from playwright.sync_api import Page
