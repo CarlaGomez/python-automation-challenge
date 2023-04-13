@@ -33,6 +33,7 @@ jobs:
         pip install Faker
         pip install pytest-reporter-html1
         pip install python-dotenv
+        pip install pylint
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
     - name: Run Pylint
