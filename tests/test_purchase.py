@@ -15,11 +15,11 @@ load_dotenv()
 login_name = os.getenv("LOGIN_NAME")
 login_password = os.getenv("LOGIN_PASSWORD")
 
-test_search_for_item_data = [
+search_for_item_data = [
     ("Fragrance", "Women", "Fragrance for Women"),
 ]
 
-test_sort_by_data = [
+sort_by_data = [
     ("p.price-ASC"),
 ]
 
@@ -39,62 +39,89 @@ shipping_data = [
     ("223", "3630", "76876"),
 ]
 
+before_sorting_data = [
+    ("Flora By Gucci Eau Fraiche", "$90.00"),
+]
 
-@pytest.mark.parametrize("product, gender, product_category", test_search_for_item_data)
+# add docstring to all functions, modules and classes
+
+
+@pytest.fixture(autouse=True)
+def run_around_tests(
+    page: Page,
+):
+    authentication_page = AuthenticationPage(page)
+    authentication_page.navigate()
+    authentication_page.login(login_name, login_password)
+
+
+@pytest.mark.parametrize("product, gender, product_category", search_for_item_data)
 def test_search_for_item(page: Page, product, gender, product_category) -> None:
-    print(os.getenv("USER"))
-
-    authentication_page = AuthenticationPage(page)
     items_page = ItemsPage(page)
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     items_page.search_for_products(product, gender)
     items_page.validate_category_name(product_category)
 
 
-@pytest.mark.parametrize("product, gender, product_category", test_search_for_item_data)
-@pytest.mark.parametrize("sort_criteria", test_sort_by_data)
-def test_sort_by(page: Page, product, gender, product_category, sort_criteria) -> None:
-    authentication_page = AuthenticationPage(page)
+@pytest.mark.parametrize("product, gender, product_category", search_for_item_data)
+@pytest.mark.parametrize("sort_criteria", sort_by_data)
+@pytest.mark.parametrize("item_name_before, item_price_before", before_sorting_data)
+def test_sort_by(
+    page: Page,
+    product,
+    gender,
+    product_category,
+    item_name_before,
+    item_price_before,
+    sort_criteria,
+) -> None:
     items_page = ItemsPage(page)
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     items_page.search_for_products(product, gender)
     items_page.validate_category_name(product_category)
+    items_page.go_to_item_details()
+    items_page.validate_item_name(item_name_before)
+    items_page.validate_item_price(item_price_before)
+    items_page.go_back_to_products()
     items_page.sort_by(sort_criteria)
 
 
-@pytest.mark.parametrize("product, gender, product_category", test_search_for_item_data)
-@pytest.mark.parametrize("sort_criteria", test_sort_by_data)
+@pytest.mark.parametrize("product, gender, product_category", search_for_item_data)
+@pytest.mark.parametrize("sort_criteria", sort_by_data)
 @pytest.mark.parametrize("item_name", item_name_data)
 @pytest.mark.parametrize("item_price", item_price_data)
+@pytest.mark.parametrize("item_name_before, item_price_before", before_sorting_data)
 def test_view_item_details(
-    page: Page, product, gender, product_category, sort_criteria, item_name, item_price
+    page: Page,
+    product,
+    gender,
+    product_category,
+    item_name_before,
+    item_price_before,
+    sort_criteria,
+    item_name,
+    item_price,
 ) -> None:
-    authentication_page = AuthenticationPage(page)
     items_page = ItemsPage(page)
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     items_page.search_for_products(product, gender)
     items_page.validate_category_name(product_category)
+    items_page.go_to_item_details()
+    items_page.validate_item_name(item_name_before)
+    items_page.validate_item_price(item_price_before)
+    items_page.go_back_to_products()
     items_page.sort_by(sort_criteria)
     items_page.go_to_item_details()
     items_page.validate_item_name(item_name)
     items_page.validate_item_price(item_price)
 
 
-@pytest.mark.parametrize("product, gender, product_category", test_search_for_item_data)
-@pytest.mark.parametrize("sort_criteria", test_sort_by_data)
+@pytest.mark.parametrize("product, gender, product_category", search_for_item_data)
+@pytest.mark.parametrize("sort_criteria", sort_by_data)
 @pytest.mark.parametrize("item_name", item_name_data)
 @pytest.mark.parametrize("item_price", item_price_data)
 def test_add_item_to_cart(
     page: Page, product, gender, product_category, sort_criteria, item_name, item_price
 ) -> None:
-    authentication_page = AuthenticationPage(page)
     items_page = ItemsPage(page)
     checkout_page = CheckoutPage(page)
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     items_page.search_for_products(product, gender)
     items_page.validate_category_name(product_category)
     items_page.sort_by(sort_criteria)
@@ -107,11 +134,7 @@ def test_add_item_to_cart(
 
 @pytest.mark.parametrize("item_name", item_name_data)
 def test_view_shopping_cart(page: Page, item_name) -> None:
-    authentication_page = AuthenticationPage(page)
     checkout_page = CheckoutPage(page)
-
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     checkout_page.go_to_shopping_cart()
     checkout_page.validate_items_on_shopping_cart("Shopping Cart", item_name, "1")
 
@@ -121,11 +144,7 @@ def test_view_shopping_cart(page: Page, item_name) -> None:
 def test_fill_shipping_information(
     page: Page, item_name, item_price, total_price, country_id, region_id, zipcode
 ) -> None:
-    authentication_page = AuthenticationPage(page)
     checkout_page = CheckoutPage(page)
-
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     checkout_page.go_to_shopping_cart()
     checkout_page.validate_items_on_shopping_cart("Shopping Cart", item_name, 1)
     checkout_page.fill_shipping(country_id, region_id, zipcode)
@@ -137,11 +156,7 @@ def test_fill_shipping_information(
 def test_checkout(
     page: Page, item_name, item_price, total_price, country_id, region_id, zipcode
 ) -> None:
-    authentication_page = AuthenticationPage(page)
     checkout_page = CheckoutPage(page)
-
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     checkout_page.go_to_shopping_cart()
     checkout_page.validate_items_on_shopping_cart("Shopping Cart", item_name, 1)
     checkout_page.fill_shipping(country_id, region_id, zipcode)
@@ -157,11 +172,7 @@ def test_checkout(
 def test_confirm_purchase(
     page: Page, item_name, item_price, total_price, country_id, region_id, zipcode
 ) -> None:
-    authentication_page = AuthenticationPage(page)
     checkout_page = CheckoutPage(page)
-
-    authentication_page.navigate()
-    authentication_page.login(login_name, login_password)
     checkout_page.go_to_shopping_cart()
     checkout_page.validate_items_on_shopping_cart("Shopping Cart", item_name, 1)
     checkout_page.fill_shipping(country_id, region_id, zipcode)

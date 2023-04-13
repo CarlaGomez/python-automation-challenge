@@ -13,7 +13,6 @@ load_dotenv()
 login_name = os.getenv("LOGIN_NAME")
 login_password = os.getenv("LOGIN_PASSWORD")
 
-
 address_data = [
     ("223", "3630", "76876"),
 ]
@@ -23,7 +22,6 @@ address_data = [
 def test_register_user(page: Page, country_id, region_id, zip_code) -> None:
     authentication_page = AuthenticationPage(page)
     fake = Faker()
-
     authentication_page.navigate()
     authentication_page.is_register_account_option_checked(True)
     authentication_page.click_register_button()
@@ -53,7 +51,6 @@ def test_register_user(page: Page, country_id, region_id, zip_code) -> None:
 
 def test_login(page: Page) -> None:
     authentication_page = AuthenticationPage(page)
-
     authentication_page.navigate()
     authentication_page.login(login_name, login_password)
     authentication_page.is_user_logged_in(True)
@@ -61,7 +58,6 @@ def test_login(page: Page) -> None:
 
 def test_logout(page: Page) -> None:
     authentication_page = AuthenticationPage(page)
-
     authentication_page.navigate()
     authentication_page.is_user_logged_in(False)
     authentication_page.login(login_name, login_password)
