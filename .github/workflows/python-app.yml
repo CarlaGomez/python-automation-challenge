@@ -34,6 +34,7 @@ jobs:
         pip install python-dotenv
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
+      uses: actions/checkout@v2
     - name: Run Pylint
       run: pylint tests/
       env:
