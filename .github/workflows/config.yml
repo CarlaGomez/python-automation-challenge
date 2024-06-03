@@ -25,18 +25,17 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.10"
+    - name: Ensure browsers are installed
+      run: python -m playwright install
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install playwright
         pip install pytest
         pip install pytest-playwright==0.3.0
         pip install Faker
         pip install pytest-reporter-html1
         pip install python-dotenv
         pip install pylint
-    - name: Ensure browsers are installed
-      run: python -m playwright install --with-deps
     - name: Run Pylint
       run: pylint tests/
       env:
